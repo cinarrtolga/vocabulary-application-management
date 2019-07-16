@@ -2,10 +2,12 @@ import { applyMiddleware, combineReducers, compose, createStore } from 'redux';
 import thunk from 'redux-thunk';
 import { routerReducer, routerMiddleware } from 'react-router-redux';
 import * as loginActions from './LoginReducers';
+import * as wordActions from './WordsReducers';
 
-export default function configureStore (history, initialState) {
+export default function configureStore(history, initialState) {
   const reducers = {
-    loginActions: loginActions.reducer
+    loginActions: loginActions.reducer,
+    wordActions: wordActions.reducer
   };
 
   const middleware = [
