@@ -10,7 +10,10 @@ import {
     Modal,
     ModalHeader,
     ModalBody,
-    ModalFooter
+    ModalFooter,
+    Form,
+    FormGroup,
+    Input
 } from 'reactstrap';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
@@ -22,7 +25,10 @@ class WordsPage extends Component {
         super(props);
         this.state = {
             fadeIn: true,
-            modal: false
+            insertModal: false,
+            keyword: '',
+            mean: '',
+            operationalItem: null
         };
     }
 
@@ -30,20 +36,119 @@ class WordsPage extends Component {
         this.props.getAllWords();
     }
 
+    //////////
+    //Update Button Click Method.
+    //Working with word item.
+    //This button trigger to redux action.
+    /////////
+    //#region
     btnWordUpdate = (item) => {
         this.props.updateWord(item);
     }
+    //#endregion
 
+    //////////
+    //Update operation button
+    //It's different from Click Button
+    //This is using for update in database.
+    //////////
+    //#region
+    updateOperation = () => {
+        this.setState({
+            operationalItem: {
+                keyword: this.state.keyword,
+                mean: this.state.mean
+            }
+        });
+    }
+    //#endregion
+
+    //////////
+    //Delete Button Click Method.
+    //Working with word item.
+    //This button trigger to redux action.
+    /////////
+    //#region
     btnWordDelete = (item) => {
         this.props.deleteWord(item);
     }
+    //#endregion
 
-    toggle = (item) => {
-        this.setState(prevState => ({
-            modal: !prevState.modal
-        }));
+    //////////
+    //Pop-up open method.
+    //It's working with item and pop-up type.
+    //Pop-up type is state name.
+    //////////
+    //#region
+    getModalPopUp = (item, type) => {
+        this.setState({
+            [type]: true,
+            keyword: item.keyword,
+            mean: item.meam,
+            operationalItem: item
+        });
     }
+    //#endregion
 
+    //////////
+    //Pop-up close method.
+    //It's working with item and pop-up type.
+    //Pop-up type is state name.
+    /////////
+    //#region
+    closeModalPopUp = (type) => {
+        this.setState({
+            [type]: false
+        });
+    }
+    //#endregion
+
+    //////////
+    //Word update pop-up.
+    //Working with state.
+    //////////
+    //#region
+    WordOperationModal = () => {
+        return (
+            <Modal isOpen={this.state.insertModal} toggle={this.closeModalPopUp.bind(this, 'insertModal')}>
+                <ModalHeader toggle={this.closeModalPopUp.bind(this, 'insertModal')}>Updating {this.state.keyword}</ModalHeader>
+                <ModalBody>
+                    <Form>
+                        <FormGroup>
+                            <Input
+                                type='text'
+                                className='form-control'
+                                placeholder='Keyword'
+                                value={this.state.keyword}
+                                onChange={e => this.setState({ keyword: e.target.value })}
+                            />
+                        </FormGroup>
+                        <FormGroup>
+                            <Input
+                                type='text'
+                                className='form-control'
+                                placeholder='Mean'
+                                value={this.state.mean}
+                                onChange={e => this.setState({ mean: e.target.value })}
+                            />
+                        </FormGroup>
+                    </Form>
+                </ModalBody>
+                <ModalFooter>
+                    <Button color="primary" onClick={this.toggle}>Insert</Button>{' '}
+                    <Button color="secondary" onClick={this.closeModalPopUp.bind(this, 'insertModal')}>Cancel</Button>
+                </ModalFooter>
+            </Modal>
+        );
+    }
+    //#endregion
+
+    //////////
+    //Application words table.
+    //Working With Word List.
+    //Words are coming from redux and filling in componentWillMount method.
+    /////////
+    //#region 
     WordTables = () => {
         if (this.props.wordsList.length > 0) {
             return this.props.wordsList.map((item, i) => {
@@ -56,7 +161,7 @@ class WordsPage extends Component {
                         <td>
                             <ButtonGroup>
                                 <Button
-                                    onClick={this.toggle.bind(this, item)}
+                                    onClick={this.getModalPopUp.bind(this, item, 'insertModal')}
                                 >
                                     Güncelle
                                 </Button>
@@ -72,22 +177,12 @@ class WordsPage extends Component {
             });
         }
     }
+    //#endregion
 
-    WordOperationModal = () => {
-        return (
-            <Modal isOpen={this.state.modal} toggle={this.toggle}>
-                <ModalHeader toggle={this.toggle}>Modal title</ModalHeader>
-                <ModalBody>
-                    Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-            </ModalBody>
-                <ModalFooter>
-                    <Button color="primary" onClick={this.toggle}>Do Something</Button>{' '}
-                    <Button color="secondary" onClick={this.toggle}>Cancel</Button>
-                </ModalFooter>
-            </Modal>
-        );
-    }
-
+    //////////
+    //Page Load
+    //////////
+    //#region
     render() {
         if (!this.props.loading) {
             return (
@@ -129,13 +224,19 @@ class WordsPage extends Component {
             );
         }
     }
+    //#endregion
 };
 
+//////////
+//Values from redux
+/////////
+//#region
 const mapStateToProps = state => {
     const { loading, wordsList } = state.wordActions
 
     return { loading, wordsList };
 };
+//#endregion
 
 export default connect(
     mapStateToProps,
