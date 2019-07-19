@@ -15,6 +15,12 @@ class LoginPage extends Component {
         }
     }
 
+    //////////
+    //User Login Method.
+    //Working with state.
+    //Trigger to redux action
+    /////////
+    //#region
     checkLogin = () => {
         if (this.state.username.length > 0 && this.state.password.length > 0) {
             this.setState({ loginControl: false });
@@ -23,7 +29,12 @@ class LoginPage extends Component {
             this.setState({ loginControl: true });
         }
     }
+    //#endregion
 
+    //////////
+    //Page Body
+    //////////
+    //#region
     render() {
         return (
             <Container>
@@ -72,6 +83,7 @@ class LoginPage extends Component {
             </Container>
         );
     }
+    //#endregion
 };
 
 export default connect(
