@@ -26,6 +26,7 @@ class WordsPage extends Component {
         this.state = {
             fadeIn: true,
             insertModal: false,
+            removeModal: false,
             keyword: '',
             mean: '',
             operationalItem: null
@@ -135,8 +136,29 @@ class WordsPage extends Component {
                     </Form>
                 </ModalBody>
                 <ModalFooter>
-                    <Button color="primary" onClick={this.toggle}>Insert</Button>{' '}
+                    <Button color="primary" onClick={this.btnWordUpdate.bind(this, this.state.operationalItem)}>Insert</Button>
                     <Button color="secondary" onClick={this.closeModalPopUp.bind(this, 'insertModal')}>Cancel</Button>
+                </ModalFooter>
+            </Modal>
+        );
+    }
+    //#endregion
+
+    //////////
+    //Word remove pop-up
+    //Working with state.
+    //////////
+    //#region
+    WordDeleteModal = () => {
+        return (
+            <Modal isOpen={this.state.removeModal} toggle={this.closeModalPopUp.bind(this, 'removeModal')}>
+                <ModalHeader toggle={this.closeModalPopUp.bind(this, 'removeModal')}>Removing {this.state.keyword}</ModalHeader>
+                <ModalBody>
+                    If you click remove button, you will delete this word. Are you sure?
+                </ModalBody>
+                <ModalFooter>
+                    <Button color="primary" onClick={this.btnWordDelete.bind(this, this.state.operationalItem)}>Remove</Button>{' '}
+                    <Button color="secondary" onClick={this.closeModalPopUp.bind(this, 'removeModal')}>Cancel</Button>
                 </ModalFooter>
             </Modal>
         );
@@ -166,7 +188,7 @@ class WordsPage extends Component {
                                     Güncelle
                                 </Button>
                                 <Button
-                                    onClick={this.btnWordDelete.bind(this, item)}
+                                    onClick={this.getModalPopUp.bind(this, item, 'removeModal')}
                                 >
                                     Sil
                                 </Button>
@@ -210,6 +232,7 @@ class WordsPage extends Component {
                         </Table>
                     </Row>
                     {this.WordOperationModal()}
+                    {this.WordDeleteModal()}
                 </Container>
             );
         } else {
