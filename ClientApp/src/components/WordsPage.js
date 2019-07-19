@@ -25,8 +25,9 @@ class WordsPage extends Component {
         super(props);
         this.state = {
             fadeIn: true,
-            insertModal: false,
+            updateModal: false,
             removeModal: false,
+            insertModal: false,
             keyword: '',
             mean: '',
             operationalItem: null
@@ -49,6 +50,34 @@ class WordsPage extends Component {
     //#endregion
 
     //////////
+    //Delete Button Click Method.
+    //Working with word item.
+    //This button trigger to redux action.
+    /////////
+    //#region
+    btnWordDelete = (item) => {
+        this.props.deleteWord(item);
+    }
+    //#endregion
+
+    //////////
+    //Insert button click method
+    //This action trigger to redux action
+    //////////
+    //#region
+    btnWordInsert = () => {
+        var data = {
+            Id: null,
+            keyword: this.state.keyword,
+            mean: this.state.mean,
+            status: true
+        };
+
+        this.props.insertNewWord(data);
+    }
+    //#endregion
+
+    //////////
     //Update operation button
     //It's different from Click Button
     //This is using for update in database.
@@ -61,17 +90,6 @@ class WordsPage extends Component {
                 mean: this.state.mean
             }
         });
-    }
-    //#endregion
-
-    //////////
-    //Delete Button Click Method.
-    //Working with word item.
-    //This button trigger to redux action.
-    /////////
-    //#region
-    btnWordDelete = (item) => {
-        this.props.deleteWord(item);
     }
     //#endregion
 
@@ -111,8 +129,8 @@ class WordsPage extends Component {
     //#region
     WordOperationModal = () => {
         return (
-            <Modal isOpen={this.state.insertModal} toggle={this.closeModalPopUp.bind(this, 'insertModal')}>
-                <ModalHeader toggle={this.closeModalPopUp.bind(this, 'insertModal')}>Updating {this.state.keyword}</ModalHeader>
+            <Modal isOpen={this.state.updateModal} toggle={this.closeModalPopUp.bind(this, 'updateModal')}>
+                <ModalHeader toggle={this.closeModalPopUp.bind(this, 'updateModal')}>Updating {this.state.keyword}</ModalHeader>
                 <ModalBody>
                     <Form>
                         <FormGroup>
@@ -166,6 +184,46 @@ class WordsPage extends Component {
     //#endregion
 
     //////////
+    //Insert New Word
+    //Using state for insert
+    //////////
+    //#region
+    InsertNewWordModal = () => {
+        return (
+            <Modal isOpen={this.state.insertModal} toggle={this.closeModalPopUp.bind(this, 'insertModal')}>
+                <ModalHeader toggle={this.closeModalPopUp.bind(this, 'insertModal')}>Insert New Word</ModalHeader>
+                <ModalBody>
+                    <Form>
+                        <FormGroup>
+                            <Input
+                                type='text'
+                                className='form-control'
+                                placeholder='Keyword'
+                                value={this.state.keyword}
+                                onChange={e => this.setState({ keyword: e.target.value })}
+                            />
+                        </FormGroup>
+                        <FormGroup>
+                            <Input
+                                type='text'
+                                className='form-control'
+                                placeholder='Mean'
+                                value={this.state.mean}
+                                onChange={e => this.setState({ mean: e.target.value })}
+                            />
+                        </FormGroup>
+                    </Form>
+                </ModalBody>
+                <ModalFooter>
+                    <Button color="primary" onClick={this.btnWordUpdate.bind(this, this.state.operationalItem)}>Insert</Button>
+                    <Button color="secondary" onClick={this.closeModalPopUp.bind(this, 'insertModal')}>Cancel</Button>
+                </ModalFooter>
+            </Modal>
+        );
+    }
+    //#endregion
+
+    //////////
     //Application words table.
     //Working With Word List.
     //Words are coming from redux and filling in componentWillMount method.
@@ -183,14 +241,14 @@ class WordsPage extends Component {
                         <td>
                             <ButtonGroup>
                                 <Button
-                                    onClick={this.getModalPopUp.bind(this, item, 'insertModal')}
+                                    onClick={this.getModalPopUp.bind(this, item, 'updateModal')}
                                 >
-                                    Güncelle
+                                    Update
                                 </Button>
                                 <Button
                                     onClick={this.getModalPopUp.bind(this, item, 'removeModal')}
                                 >
-                                    Sil
+                                    Remove
                                 </Button>
                             </ButtonGroup>
                         </td>
@@ -216,6 +274,15 @@ class WordsPage extends Component {
                         <div className='table-page-subDescription'>
                             <p>Vocabulary list as follows. You can create/update or remove any word in this page.</p>
                         </div>
+                        <Container>
+                            <div className='insert-buton-area'>
+                                <Button
+                                    onClick={this.getModalPopUp.bind(this, "", 'insertModal')}
+                                >
+                                    Insert New
+                                </Button>
+                            </div>
+                        </Container>
                         <Table className='table table-bordered'>
                             <thead>
                                 <tr>
@@ -233,6 +300,7 @@ class WordsPage extends Component {
                     </Row>
                     {this.WordOperationModal()}
                     {this.WordDeleteModal()}
+                    {this.InsertNewWordModal()}
                 </Container>
             );
         } else {
