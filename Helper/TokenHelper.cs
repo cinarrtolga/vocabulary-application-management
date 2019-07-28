@@ -35,7 +35,7 @@ namespace VocabularyManagementTool.Helper
         //////
         //Use for create new token if token is null
         //////
-        public async Task<string> CreateToken()
+        public string CreateToken()
         {
            var request = new HttpRequestMessage(HttpMethod.Post,
            "http://services.cinarr.com/token");
@@ -48,7 +48,7 @@ namespace VocabularyManagementTool.Helper
 
             request.Content = new FormUrlEncodedContent(values);
             var client = _clientFactory.CreateClient();
-            var response = await client.SendAsync(request);
+            var response = client.SendAsync(request);
 
             return "";
         }

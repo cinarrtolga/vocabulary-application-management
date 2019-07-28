@@ -1,23 +1,43 @@
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using vocabularyManagementTool.Model;
+using VocabularyManagementTool.Helper;
+using Microsoft.AspNetCore.Http;
 
 namespace vocabularyManagementTool.Controllers
 {
     [Route("api/[controller]")]
     public class WordController : Controller
     {
+        private readonly TokenHelper _tokenhelper;
+        private readonly WebApiHelper _webApiHelper;
+        IHttpContextAccessor _accessor;
+        private string _token;
+
+        public WordController(TokenHelper tokenhelper, IHttpContextAccessor accessor, WebApiHelper webApiHelper)
+        {
+            _tokenhelper = tokenhelper;
+            _accessor = accessor;
+            _webApiHelper = webApiHelper;
+        }
+
+        //////
+        //Use for check all words.
+        //This is using from Word Game.
+        //No need parameter or anything.
+        //////
         [HttpPost("[action]")]
         public ActionResult GetAllWords()
         {
-            List<WordsViewModel> vocabularyList = new List<WordsViewModel>();
-            vocabularyList.Add(new WordsViewModel { Id = 1, Keyword = "Test1", Mean = "Ornek 1", Status = true });
-            vocabularyList.Add(new WordsViewModel { Id = 2, Keyword = "Test2", Mean = "Ornek 2", Status = true });
-            vocabularyList.Add(new WordsViewModel { Id = 3, Keyword = "Test3", Mean = "Ornek 3", Status = true });
-            vocabularyList.Add(new WordsViewModel { Id = 4, Keyword = "Test4", Mean = "Ornek 4", Status = true });
+            //checking token for request
+            if(_tokenhelper.CheckToken()){
+                var httpContext = _accessor.HttpContext;
+                _token = httpContext.Session.GetString("_token");
+            }else{
+                _token = _tokenhelper.CreateToken();
+            }
+
+            List<WordsViewModel> vocabularyList = _webApiHelper.GetWordsByWebApi(_token);
 
             return Json(new { success = true, data = vocabularyList });
         }
