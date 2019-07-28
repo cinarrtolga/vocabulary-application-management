@@ -87,9 +87,22 @@ namespace vocabularyManagementTool.Controllers
             return Json(new { success = true });
         }
 
+        //////
+        //Use for update word
+        //This is using from Word Game
+        //////
         [HttpPost("[Action]")]
         public ActionResult DeleteWord(WordsViewModel data)
         {
+            if(_tokenhelper.CheckToken()){
+                var httpContent = _accessor.HttpContext;
+                _token = httpContent.Session.GetString("_token");
+            }else {
+                _token = _tokenhelper.CreateToken();
+            }
+
+            _webApiHelper.DeleteWordByWebApi(data, _token);
+
             return Json(new { success = true });
         }
     }

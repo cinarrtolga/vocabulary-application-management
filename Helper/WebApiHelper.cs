@@ -64,5 +64,23 @@ namespace VocabularyManagementTool.Helper
 
            return true; 
         }
+
+        public bool DeleteWordByWebApi(WordsViewModel requestBody, string token){
+            var request = new HttpRequestMessage(HttpMethod.Post,
+            webApiUrl + "api/WordGame/DeleteWord");
+
+            request.Headers.Add("Content-Type", "application/json");
+            request.Headers.Add("Authorization", "Bearer " + token);
+
+            var json = JsonConvert.SerializeObject(requestBody);
+
+            request.Content = new StringContent(json, UnicodeEncoding.UTF8, "application/json");
+
+            var client = _clientFactory.CreateClient();
+            var response = client.SendAsync(request);
+
+            return true;
+        }
+
     }   
 }
