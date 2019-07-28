@@ -32,16 +32,6 @@ export const wordActions = {
 
         dispatch({ type: new_word_insert });
     },
-    getWordByWordId: (data) => (dispatch) => {
-        const xhr = new XMLHttpRequest();
-        xhr.open('post', 'api/word/getWordByWordId', false);
-        xhr.onload = () => {
-            console.log(xhr.responseText);
-        }
-        xhr.send(data);
-
-        dispatch({ type: get_word });
-    },
     updateWord: (data) => (dispatch) => {
         const xhr = new XMLHttpRequest();
         xhr.open('post', 'api/word/updateWord', false);

@@ -81,12 +81,6 @@ namespace vocabularyManagementTool.Controllers
             return Json(new { success = true });
         }
 
-        [HttpPost("[Action]")]
-        public ActionResult GetWordByWordId(WordsViewModel data)
-        {
-            return Json(new { success = true });
-        }
-
         //////
         //Use for update word
         //This is using from Word Game
