@@ -29,7 +29,7 @@ namespace vocabularyManagementTool.Controllers
         [HttpPost("[action]")]
         public ActionResult GetAllWords()
         {
-            //checking token for request
+            //Checking token for request
             if(_tokenhelper.CheckToken()){
                 var httpContext = _accessor.HttpContext;
                 _token = httpContext.Session.GetString("_token");
@@ -42,9 +42,23 @@ namespace vocabularyManagementTool.Controllers
             return Json(new { success = true, data = vocabularyList });
         }
 
+        //////
+        //Use for insert new word.
+        //This is using from Word Game.
+        //////
         [HttpPost("[Action]")]
         public ActionResult NewWord(WordsViewModel data)
         {
+            //Checking token for request
+            if(_tokenhelper.CheckToken()){
+                var httpContent = _accessor.HttpContext;
+                _token = httpContent.Session.GetString("_token");
+            }else{
+                _token = _tokenhelper.CreateToken();
+            }
+
+            _webApiHelper.InsertNewWordByWebApi(data, _token);
+
             return Json(new { success = true });
         }
 
