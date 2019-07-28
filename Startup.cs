@@ -1,3 +1,4 @@
+using System;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -21,6 +22,17 @@ namespace vocabularyManagementTool
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+
+            //To do for web api request
+            services.AddHttpClient();
+
+            //To do for Session
+            //Default time 20 mins
+            services.AddSession(options => {
+                options.Cookie.HttpOnly = true;
+                options.Cookie.IsEssential = true;
+            });
+            services.AddHttpContextAccessor();
 
             // In production, the React files will be served from this directory
             services.AddSpaStaticFiles(configuration =>
@@ -46,6 +58,7 @@ namespace vocabularyManagementTool
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseSpaStaticFiles();
+            app.UseSession();
 
             app.UseMvc(routes =>
             {
