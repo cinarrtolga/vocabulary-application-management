@@ -35,12 +35,12 @@ namespace vocabularyManagementTool.Controllers
                 _token = httpContext.Session.GetString("_token");
             }else{
                 //_token = _tokenhelper.CreateToken();
-                _tokenhelper.CreateToken();
+                var result = _tokenhelper.CreateToken();
             }
 
-            List<WordsViewModel> vocabularyList = _webApiHelper.GetWordsByWebApi(_token);
+            //List<WordsViewModel> vocabularyList = _webApiHelper.GetWordsByWebApi(_token);
 
-            return Json(new { success = true, data = vocabularyList });
+            return Json(new { success = true });
         }
 
         //////

@@ -47,9 +47,11 @@ namespace vocabularyManagementTool.Helper {
             request.Content = new FormUrlEncodedContent(values);
             var client = _clientFactory.CreateClient();
             var response = await client.SendAsync(request);
-            //var result = response.Content.ReadAsAsync<IEnumerable<TokenViewModel>>();
 
-            //return result.access_token.ToString();
+            if (response.IsSuccessStatusCode)
+            {
+               var result = response.Content.ReadAsAsync<TokenViewModel>();
+            }
         }
     }
 }
