@@ -4,15 +4,32 @@ const initialState = { returnState: false };
 
 export const loginActions = {
     getUserDetail: (username, password) => async (dispatch, getState) => {
-        const url = `api/SampleData/Authentication?username=${username}&password=${password}`;
-        const response = await fetch(url);
-        const forecasts = await response.json();
+        const request = new FormData();
+        request.append('Username', username);
+        request.append('Password', password);
 
-        if (forecasts.success) {
-            dispatch({ type: loginSuccess });
-        } else {
-            dispatch({ type: loginFail });
+        const xhr = new XMLHttpRequest();
+        xhr.open('post', "api/Login/Authentication", true);
+
+        xhr.onload = function (e) {
+            console.log("Burda");
+            if (xhr.readyState === 4) {
+                if (xhr.status === 200) {
+                    var result = JSON.parse(xhr.response)
+                    if (result.success) {
+                        console.log("Başarılı!");
+                    }
+                } else {
+                    console.error(xhr.statusText)
+                }
+            }
+        }.bind(this)
+
+        xhr.onerror = function (e) {
+            console.error(xhr.statusText)
         }
+
+        xhr.send(request);
     }
 };
 

@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 using vocabularyManagementTool.Model;
-using VocabularyManagementTool.Helper;
+using vocabularyManagementTool.Helper.Dependencies;
 using Microsoft.AspNetCore.Http;
 
 namespace vocabularyManagementTool.Controllers
@@ -9,12 +9,12 @@ namespace vocabularyManagementTool.Controllers
     [Route("api/[controller]")]
     public class LoginController : Controller
     {
-        private readonly TokenHelper _tokenhelper;
-        private readonly LoginHelper _loginHelper;
+        private readonly ITokenHelper _tokenhelper;
+        private readonly ILoginHelper _loginHelper;
         IHttpContextAccessor _accessor;
         private string _token;
 
-        public LoginController(TokenHelper tokenhelper, IHttpContextAccessor accessor, LoginHelper loginHelper)
+        public LoginController(ITokenHelper tokenhelper, IHttpContextAccessor accessor, ILoginHelper loginHelper)
         {
             _tokenhelper = tokenhelper;
             _accessor = accessor;
@@ -25,18 +25,18 @@ namespace vocabularyManagementTool.Controllers
         //This method using for Login
         //////
         [HttpPost("[Action]")]
-        public ActionResult Login(LoginViewModel request)
+        public ActionResult Authentication(MemberViewModel request)
         {
             if(_tokenhelper.CheckToken()){
-                var httpContent = _accessor.HttpContent;
-                _token = httpContent.Session.GetStarting("_token");
+                var httpContext = _accessor.HttpContext;
+                _token = httpContext.Session.GetString("_token");
             }else {
-                _token = _tokenhelper.CreateToken();
+                //_token = _tokenhelper.CreateToken();
             }
 
             _loginHelper.LoginMember(request, _token);
 
-            return Json(new { success = false })
+            return Json(new { success = false });
         }
     }
 }

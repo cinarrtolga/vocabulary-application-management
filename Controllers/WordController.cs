@@ -1,20 +1,20 @@
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 using vocabularyManagementTool.Model;
-using VocabularyManagementTool.Helper;
+using vocabularyManagementTool.Helper.Dependencies;
 using Microsoft.AspNetCore.Http;
 
 namespace vocabularyManagementTool.Controllers
 {
     [Route("api/[controller]")]
-    public class WordController : Controller
+    public class WordController : Controller 
     {
-        private readonly TokenHelper _tokenhelper;
-        private readonly WordOperationHelper _webApiHelper;
+        private readonly ITokenHelper _tokenhelper;
+        private readonly IWordOperationHelper _webApiHelper;
         IHttpContextAccessor _accessor;
         private string _token;
 
-        public WordController(TokenHelper tokenhelper, IHttpContextAccessor accessor, WordOperationHelper webApiHelper)
+        public WordController(ITokenHelper tokenhelper, IHttpContextAccessor accessor, IWordOperationHelper webApiHelper)
         {
             _tokenhelper = tokenhelper;
             _accessor = accessor;
@@ -34,7 +34,8 @@ namespace vocabularyManagementTool.Controllers
                 var httpContext = _accessor.HttpContext;
                 _token = httpContext.Session.GetString("_token");
             }else{
-                _token = _tokenhelper.CreateToken();
+                //_token = _tokenhelper.CreateToken();
+                _tokenhelper.CreateToken();
             }
 
             List<WordsViewModel> vocabularyList = _webApiHelper.GetWordsByWebApi(_token);
@@ -54,7 +55,8 @@ namespace vocabularyManagementTool.Controllers
                 var httpContent = _accessor.HttpContext;
                 _token = httpContent.Session.GetString("_token");
             }else{
-                _token = _tokenhelper.CreateToken();
+                //_token = _tokenhelper.CreateToken();
+                
             }
 
             _webApiHelper.InsertNewWordByWebApi(data, _token);
@@ -73,7 +75,7 @@ namespace vocabularyManagementTool.Controllers
                 var httpContent = _accessor.HttpContext;
                 _token = httpContent.Session.GetString("_token");
             }else {
-                _token = _tokenhelper.CreateToken();
+                //_token = _tokenhelper.CreateToken();
             }
 
             _webApiHelper.UpdateWordByWebApi(data, _token);
@@ -92,7 +94,7 @@ namespace vocabularyManagementTool.Controllers
                 var httpContent = _accessor.HttpContext;
                 _token = httpContent.Session.GetString("_token");
             }else {
-                _token = _tokenhelper.CreateToken();
+                //_token = _tokenhelper.CreateToken();
             }
 
             _webApiHelper.DeleteWordByWebApi(data, _token);

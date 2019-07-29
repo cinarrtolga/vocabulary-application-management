@@ -2,16 +2,17 @@ using System.Text;
 using System.Net.Http;
 using System.Collections.Generic;
 using vocabularyManagementTool.Model;
+using vocabularyManagementTool.Helper.Dependencies;
 using Newtonsoft.Json;
 
-namespace VocabularyManagementTool.Helper
+namespace vocabularyManagementTool.Helper
 {
-    public class WordOperationHelper
+    public class WordOperationHelper: IWordOperationHelper
     {
         private readonly IHttpClientFactory _clientFactory;
         public readonly string webApiUrl = "https://services.cinarr.com/";
 
-        public WebApiHelper(IHttpClientFactory clientFactory){
+        public WordOperationHelper(IHttpClientFactory clientFactory){
             _clientFactory = clientFactory;
         }
 

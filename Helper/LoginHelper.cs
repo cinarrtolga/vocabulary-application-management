@@ -2,11 +2,12 @@ using System.Text;
 using System.Net.Http;
 using System.Collections.Generic;
 using vocabularyManagementTool.Model;
+using vocabularyManagementTool.Helper.Dependencies;
 using Newtonsoft.Json;
 
 namespace vocabularyManagementTool.Helper
 {
-    public class LoginHelper
+    public class LoginHelper: ILoginHelper
     {
         private readonly IHttpClientFactory _clientFactory;
         public readonly string webApiUrl = "https://services.cinarr.com/";
@@ -30,6 +31,6 @@ namespace vocabularyManagementTool.Helper
             var response = client.SendAsync(request);
 
             return true;
-        } 
+        }
     }
 }

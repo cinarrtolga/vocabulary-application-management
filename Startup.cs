@@ -1,3 +1,4 @@
+using System.Transactions;
 using System;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -6,6 +7,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using vocabularyManagementTool.Helper;
+using vocabularyManagementTool.Helper.Dependencies;
 
 namespace vocabularyManagementTool
 {
@@ -21,6 +24,10 @@ namespace vocabularyManagementTool
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddScoped<ILoginHelper, LoginHelper>();
+            services.AddScoped<ITokenHelper, TokenHelper>();
+            services.AddScoped<IWordOperationHelper, WordOperationHelper>();
+
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
             //To do for web api request

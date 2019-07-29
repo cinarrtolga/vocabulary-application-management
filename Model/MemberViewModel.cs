@@ -1,6 +1,6 @@
 namespace vocabularyManagementTool.Model
 {
-    public class LoginViewModel{
+    public class MemberViewModel{
         public string Username {get; set;}
         public string Password {get; set;}
     }
