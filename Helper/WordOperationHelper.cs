@@ -1,4 +1,3 @@
-
 using System.Text;
 using System.Net.Http;
 using System.Collections.Generic;
@@ -7,7 +6,7 @@ using Newtonsoft.Json;
 
 namespace VocabularyManagementTool.Helper
 {
-    public class WebApiHelper
+    public class WordOperationHelper
     {
         private readonly IHttpClientFactory _clientFactory;
         public readonly string webApiUrl = "https://services.cinarr.com/";

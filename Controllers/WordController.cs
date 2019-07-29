@@ -10,11 +10,11 @@ namespace vocabularyManagementTool.Controllers
     public class WordController : Controller
     {
         private readonly TokenHelper _tokenhelper;
-        private readonly WebApiHelper _webApiHelper;
+        private readonly WordOperationHelper _webApiHelper;
         IHttpContextAccessor _accessor;
         private string _token;
 
-        public WordController(TokenHelper tokenhelper, IHttpContextAccessor accessor, WebApiHelper webApiHelper)
+        public WordController(TokenHelper tokenhelper, IHttpContextAccessor accessor, WordOperationHelper webApiHelper)
         {
             _tokenhelper = tokenhelper;
             _accessor = accessor;
