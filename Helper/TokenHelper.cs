@@ -34,7 +34,8 @@ namespace vocabularyManagementTool.Helper {
         //////
         //Use for create new token if token is null
         //////
-        public async Task CreateToken () {
+        public async Task<string> CreateToken () {
+            Task<TokenViewModel> result = null;
             var request = new HttpRequestMessage (HttpMethod.Post,
                 "http://services.cinarr.com/token");
 
@@ -50,8 +51,10 @@ namespace vocabularyManagementTool.Helper {
 
             if (response.IsSuccessStatusCode)
             {
-               var result = response.Content.ReadAsAsync<TokenViewModel>();
+               result = response.Content.ReadAsAsync<TokenViewModel>();
             }
+
+            return result.Result.access_token;
         }
     }
 }

@@ -6,6 +6,6 @@ namespace vocabularyManagementTool.Helper.Dependencies
     public interface ITokenHelper
     {
         bool CheckToken();
-        Task CreateToken ();
+        Task<string> CreateToken ();
     }
 }

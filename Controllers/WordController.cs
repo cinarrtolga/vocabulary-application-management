@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 using vocabularyManagementTool.Model;
@@ -35,7 +36,8 @@ namespace vocabularyManagementTool.Controllers
                 _token = httpContext.Session.GetString("_token");
             }else{
                 //_token = _tokenhelper.CreateToken();
-                var result = _tokenhelper.CreateToken();
+                Task result = _tokenhelper.CreateToken();
+                result.Wait();
             }
 
             //List<WordsViewModel> vocabularyList = _webApiHelper.GetWordsByWebApi(_token);
