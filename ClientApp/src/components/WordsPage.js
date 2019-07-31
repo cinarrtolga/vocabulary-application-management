@@ -74,6 +74,22 @@ class WordsPage extends Component {
         };
 
         this.props.insertNewWord(data);
+
+        setTimeout(() => {
+            this.resetOperations();
+        }, 10000);
+    }
+    //#endregion
+
+    //////////
+    //This method for reset operation modals
+    //////////
+    //#region
+    resetOperations = () => {
+        this.props.resetOperations();
+        this.closeModalPopUp('updateModal');
+        this.closeModalPopUp('deleteModal');
+        this.closeModalPopUp('insertModal');
     }
     //#endregion
 
@@ -224,6 +240,40 @@ class WordsPage extends Component {
     //#endregion
 
     //////////
+    //Success pop-up
+    //Working with redux prop.
+    //////////
+    //#region
+    OperationSuccessModal = () => {
+        return (
+            <Modal isOpen={this.props.operationSuccess} toggle={this.resetOperations.bind(this)}>
+                <ModalHeader toggle={this.resetOperations.bind(this)}>Success</ModalHeader>
+                <ModalBody>
+                    You operation succeded
+                </ModalBody>
+            </Modal>
+        );
+    }
+    //#endregion
+
+    //////////
+    //Error pop-up
+    //Working with redux prop.
+    //////////
+    //#region
+    OperationFailModal = () => {
+        return (
+            <Modal isOpen={this.props.operationFail} toggle={this.resetOperations.bind(this)}>
+                <ModalHeader toggle={this.resetOperations.bind(this)}>Error</ModalHeader>
+                <ModalBody>
+                    You operation failed
+                </ModalBody>
+            </Modal>
+        );
+    }
+    //#endregion
+
+    //////////
     //Application words table.
     //Working With Word List.
     //Words are coming from redux and filling in componentWillMount method.
@@ -301,6 +351,8 @@ class WordsPage extends Component {
                     {this.WordOperationModal()}
                     {this.WordDeleteModal()}
                     {this.InsertNewWordModal()}
+                    {this.OperationSuccessModal()}
+                    {this.OperationFailModal()}
                 </Container>
             );
         } else {
@@ -323,9 +375,9 @@ class WordsPage extends Component {
 /////////
 //#region
 const mapStateToProps = state => {
-    const { loading, wordsList } = state.wordActions
+    const { loading, wordsList, operationSuccess, operationFail } = state.wordActions
 
-    return { loading, wordsList };
+    return { loading, wordsList, operationSuccess, operationFail };
 };
 //#endregion
 
