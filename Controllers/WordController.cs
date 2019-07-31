@@ -35,7 +35,6 @@ namespace vocabularyManagementTool.Controllers
                 var httpContext = _accessor.HttpContext;
                 _token = httpContext.Session.GetString("_token");
             }else{
-                //_token = _tokenhelper.CreateToken();
                 Task<string> result = _tokenhelper.CreateToken();
                 result.Wait();
                 _token = result.Result;
@@ -59,12 +58,15 @@ namespace vocabularyManagementTool.Controllers
                 var httpContent = _accessor.HttpContext;
                 _token = httpContent.Session.GetString("_token");
             }else{
-                //_token = _tokenhelper.CreateToken();
+                Task<string> result = _tokenhelper.CreateToken();
+                result.Wait();
+                _token = result.Result;
             }
 
-            _webApiHelper.InsertNewWordByWebApi(data, _token);
+            Task<bool> operationResult = _webApiHelper.InsertNewWordByWebApi(data, _token);
+            operationResult.Wait();
 
-            return Json(new { success = true });
+            return Json(new { success = operationResult.Result });
         }
 
         //////

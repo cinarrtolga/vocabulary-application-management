@@ -24,9 +24,10 @@ export const wordActions = {
     },
     insertNewWord: (data) => (dispatch) => {
         const xhr = new XMLHttpRequest();
-        xhr.open('post', 'api/word/newword', false);
+        xhr.open('post', 'api/word/newword', true);
         xhr.onload = () => {
-            console.log(xhr.responseText);
+            const result = JSON.parse(xhr.responseText);
+            console.log(result);
         };
         xhr.send(data)
 

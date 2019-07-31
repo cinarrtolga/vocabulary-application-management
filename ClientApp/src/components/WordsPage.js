@@ -215,7 +215,7 @@ class WordsPage extends Component {
                     </Form>
                 </ModalBody>
                 <ModalFooter>
-                    <Button color="primary" onClick={this.btnWordUpdate.bind(this, this.state.operationalItem)}>Insert</Button>
+                    <Button color="primary" onClick={this.btnWordInsert.bind(this, this.state.operationalItem)}>Insert</Button>
                     <Button color="secondary" onClick={this.closeModalPopUp.bind(this, 'insertModal')}>Cancel</Button>
                 </ModalFooter>
             </Modal>
