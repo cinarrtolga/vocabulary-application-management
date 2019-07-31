@@ -1,7 +1,9 @@
 using System.Text;
-using Microsoft.Extensions.Http;
-using System.Net.Http;
 using System.Collections.Generic;
+using System.Threading.Tasks;
+using System.Net.Http;
+using Microsoft.Extensions.Http;
+using Microsoft.AspNetCore.Http;
 using vocabularyManagementTool.Model;
 using vocabularyManagementTool.Helper.Dependencies;
 using Newtonsoft.Json;
@@ -11,7 +13,7 @@ namespace vocabularyManagementTool.Helper
     public class WordOperationHelper: IWordOperationHelper
     {
         private readonly IHttpClientFactory _clientFactory;
-        public readonly string webApiUrl = "https://services.cinarr.com/";
+        public readonly string webApiUrl = "http://services.cinarr.com/";
 
         public WordOperationHelper(IHttpClientFactory clientFactory){
             _clientFactory = clientFactory;
@@ -20,19 +22,23 @@ namespace vocabularyManagementTool.Helper
         //////
         //This method getting all words from database
         //////
-        public List<WordsViewModel> GetWordsByWebApi(string token){
-            List<WordsViewModel> words = new List<WordsViewModel>();
+        public async Task<WordsViewModelByWebApi> GetWordsByWebApi(string token){
+            Task<WordsViewModelByWebApi> success = null;
 
-            var request = new HttpRequestMessage(HttpMethod.Post,
+            var request = new HttpRequestMessage(HttpMethod.Get,
             webApiUrl + "api/WordGame/GetAllWords");
 
-            request.Headers.Add("Content-Type","application/json");
             request.Headers.Add("Authorization","Bearer " + token);
 
             var client = _clientFactory.CreateClient();
-            var response = client.SendAsync(request);
+            var response = await client.SendAsync(request);
 
-            return words;
+            if (response.IsSuccessStatusCode)
+            {
+               success = response.Content.ReadAsAsync<WordsViewModelByWebApi>();
+            }
+
+            return await success;
         }
 
         //////

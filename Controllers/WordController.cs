@@ -36,13 +36,15 @@ namespace vocabularyManagementTool.Controllers
                 _token = httpContext.Session.GetString("_token");
             }else{
                 //_token = _tokenhelper.CreateToken();
-                Task result = _tokenhelper.CreateToken();
+                Task<string> result = _tokenhelper.CreateToken();
                 result.Wait();
+                _token = result.Result;
             }
 
-            //List<WordsViewModel> vocabularyList = _webApiHelper.GetWordsByWebApi(_token);
+            Task<WordsViewModelByWebApi> vocabularyList = _webApiHelper.GetWordsByWebApi(_token);
+            vocabularyList.Wait();
 
-            return Json(new { success = true });
+            return Json(new { success = true, data: vocabularyList.success });
         }
 
         //////
