@@ -10,18 +10,18 @@ using vocabularyManagementTool.Model;
 namespace vocabularyManagementTool.Helper {
     public class TokenHelper : ITokenHelper {
         private readonly IHttpClientFactory _clientFactory;
-        IHttpContextAccessor accessor;
+        IHttpContextAccessor _accessor;
 
         public TokenHelper (IHttpClientFactory clientFactory, IHttpContextAccessor accessor) {
             _clientFactory = clientFactory;
-            this.accessor = accessor;
+            _accessor = accessor;
         }
 
         //////
         //Use for token check before web request
         /////
         public bool CheckToken () {
-            var httpContext = accessor.HttpContext;
+            var httpContext = _accessor.HttpContext;
             var token = httpContext.Session.GetString ("_token");
 
             if (!string.IsNullOrEmpty (token)) {
@@ -52,6 +52,9 @@ namespace vocabularyManagementTool.Helper {
             if (response.IsSuccessStatusCode)
             {
                result = response.Content.ReadAsAsync<TokenViewModel>();
+
+                var httpContext = _accessor.HttpContext;
+                httpContext.Session.SetString ("_token", result.Result.access_token);
             }
 
             return result.Result.access_token;

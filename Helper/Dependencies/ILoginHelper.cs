@@ -1,8 +1,9 @@
+using System.Threading.Tasks;
 using vocabularyManagementTool.Model;
 
 namespace vocabularyManagementTool.Helper.Dependencies
 {
     public interface ILoginHelper{
-         bool LoginMember(MemberViewModel member, string token);
+         Task<bool> LoginMember(MemberViewModel member, string token);
     }
 }

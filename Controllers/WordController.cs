@@ -44,7 +44,7 @@ namespace vocabularyManagementTool.Controllers
             Task<WordsViewModelByWebApi> vocabularyList = _webApiHelper.GetWordsByWebApi(_token);
             vocabularyList.Wait();
 
-            return Json(new { success = true, data: vocabularyList.success });
+            return Json(new { success = true, data = vocabularyList.Result });
         }
 
         //////
@@ -60,7 +60,6 @@ namespace vocabularyManagementTool.Controllers
                 _token = httpContent.Session.GetString("_token");
             }else{
                 //_token = _tokenhelper.CreateToken();
-                
             }
 
             _webApiHelper.InsertNewWordByWebApi(data, _token);

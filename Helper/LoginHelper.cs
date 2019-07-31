@@ -1,18 +1,22 @@
-using System.Text;
-using System.Net.Http;
 using System.Collections.Generic;
-using vocabularyManagementTool.Model;
-using vocabularyManagementTool.Helper.Dependencies;
+using System.Net.Cache;
+using System.Net.Http;
+using System.Net.Http.Headers;
+using System.Runtime.CompilerServices;
+using System.Text;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Http;
 using Newtonsoft.Json;
+using vocabularyManagementTool.Helper.Dependencies;
+using vocabularyManagementTool.Model;
 
-namespace vocabularyManagementTool.Helper
-{
-    public class LoginHelper: ILoginHelper
-    {
+namespace vocabularyManagementTool.Helper {
+    public class LoginHelper : ILoginHelper {
         private readonly IHttpClientFactory _clientFactory;
         public readonly string webApiUrl = "https://services.cinarr.com/";
 
-        public LoginHelper(IHttpClientFactory clientFactory){
+        public LoginHelper (IHttpClientFactory clientFactory) {
             _clientFactory = clientFactory;
         }
 
@@ -20,17 +24,29 @@ namespace vocabularyManagementTool.Helper
         //This method using for login.
         //Checking member in database.
         //////
-        public bool LoginMember(MemberViewModel member, string token){
-            var request = new HttpRequestMessage(HttpMethod.Post,
-            webApiUrl + "api/Member/Login");
+        public async Task<bool> LoginMember (MemberViewModel member, string token) {
+            Task<MemberViewModelByWebApi> success = null;
 
-            request.Headers.Add("Content-Type","application/json");
-            request.Headers.Add("Authorization","Bearer " + token);
+            var request = new HttpRequestMessage (HttpMethod.Post,
+                webApiUrl + "api/Member/Login");
 
-            var client = _clientFactory.CreateClient();
-            var response = client.SendAsync(request);
+            request.Headers.Add ("Authorization", "Bearer " + token);
 
-            return true;
+            var json = JsonConvert.SerializeObject (member);
+            request.Content = new StringContent (json, UnicodeEncoding.UTF8, "application/json");
+
+            var client = _clientFactory.CreateClient ();
+            var response = await client.SendAsync (request);
+
+            if (response.IsSuccessStatusCode) {
+                success = response.Content.ReadAsAsync<MemberViewModelByWebApi> ();
+            }
+
+            if (success.Result != null) {
+                return true;
+            } else {
+                return false;
+            }
         }
     }
 }

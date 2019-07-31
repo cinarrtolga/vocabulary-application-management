@@ -12,7 +12,6 @@ export const loginActions = {
         xhr.open('post', "api/Login/Authentication", true);
 
         xhr.onload = function (e) {
-            console.log("Burda");
             if (xhr.readyState === 4) {
                 if (xhr.status === 200) {
                     var result = JSON.parse(xhr.response)

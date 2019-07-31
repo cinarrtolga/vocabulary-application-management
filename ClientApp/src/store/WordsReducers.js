@@ -15,12 +15,12 @@ const initialState = {
 export const wordActions = {
     getAllWords: () => (dispatch) => {
         const xhr = new XMLHttpRequest();
-        xhr.open('post', 'api/word/getallwords', false);
+        xhr.open('post', 'api/word/getallwords', true);
         xhr.onload = () => {
             const result = JSON.parse(xhr.responseText);
-            dispatch({ type: get_words_list, data: result.data });
+            dispatch({ type: get_words_list, data: result.data.success });
         };
-        xhr.send();
+        xhr.send(null);
     },
     insertNewWord: (data) => (dispatch) => {
         const xhr = new XMLHttpRequest();

@@ -103,7 +103,7 @@ class WordsPage extends Component {
         this.setState({
             [type]: true,
             keyword: item.keyword,
-            mean: item.meam,
+            mean: item.mean,
             operationalItem: item
         });
     }
