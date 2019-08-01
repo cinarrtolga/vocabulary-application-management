@@ -8,7 +8,7 @@ namespace vocabularyManagementTool.Helper.Dependencies
     {
         Task<WordsViewModelByWebApi> GetWordsByWebApi(string token);
         Task<bool> InsertNewWordByWebApi(WordsViewModel requestBody, string token);
-        bool UpdateWordByWebApi(WordsViewModel requestBody, string token);
+        Task<bool> UpdateWordByWebApi(WordsViewModel requestBody, string token);
         bool DeleteWordByWebApi(WordsViewModel requestBody, string token);
     }
 }

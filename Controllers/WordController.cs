@@ -1,3 +1,4 @@
+using System.Collections.Concurrent;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
@@ -80,12 +81,15 @@ namespace vocabularyManagementTool.Controllers
                 var httpContent = _accessor.HttpContext;
                 _token = httpContent.Session.GetString("_token");
             }else {
-                //_token = _tokenhelper.CreateToken();
+               Task<string> result = _tokenhelper.CreateToken();
+                result.Wait();
+                _token = result.Result;
             }
 
-            _webApiHelper.UpdateWordByWebApi(data, _token);
+            Task<bool> operationResult = _webApiHelper.UpdateWordByWebApi(data, _token);
+            operationResult.Wait();
 
-            return Json(new { success = true });
+            return Json(new { success = operationResult.Result });
         }
 
         //////
