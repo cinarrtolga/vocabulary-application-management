@@ -100,12 +100,11 @@ namespace vocabularyManagementTool.Helper
         //////
         //This method using for delete word in database
         //////
-        public bool DeleteWordByWebApi(WordsViewModel requestBody, string token)
+        public async Task<bool> DeleteWordByWebApi(WordsViewModel requestBody, string token)
         {
             var request = new HttpRequestMessage(HttpMethod.Post,
             webApiUrl + "api/WordGame/DeleteWord");
 
-            request.Headers.Add("Content-Type", "application/json");
             request.Headers.Add("Authorization", "Bearer " + token);
 
             var json = JsonConvert.SerializeObject(requestBody);
@@ -113,9 +112,16 @@ namespace vocabularyManagementTool.Helper
             request.Content = new StringContent(json, UnicodeEncoding.UTF8, "application/json");
 
             var client = _clientFactory.CreateClient();
-            var response = client.SendAsync(request);
+            var response = await client.SendAsync(request);
 
-            return true;
+            if (response.IsSuccessStatusCode)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
 
     }

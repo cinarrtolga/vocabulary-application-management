@@ -103,12 +103,14 @@ namespace vocabularyManagementTool.Controllers
                 var httpContent = _accessor.HttpContext;
                 _token = httpContent.Session.GetString("_token");
             }else {
-                //_token = _tokenhelper.CreateToken();
+                Task<string> result = _tokenhelper.CreateToken();
+                result.Wait();
+                _token = result.Result;
             }
 
-            _webApiHelper.DeleteWordByWebApi(data, _token);
+            Task<bool> operationResult= _webApiHelper.DeleteWordByWebApi(data, _token);
 
-            return Json(new { success = true });
+            return Json(new { success = operationResult.Result });
         }
     }
 }
