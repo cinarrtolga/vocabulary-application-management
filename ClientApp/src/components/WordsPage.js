@@ -30,6 +30,7 @@ class WordsPage extends Component {
             insertModal: false,
             keyword: '',
             mean: '',
+            version: 0,
             operationalItem: null
         };
     }
@@ -70,6 +71,7 @@ class WordsPage extends Component {
             Id: null,
             keyword: this.state.keyword,
             mean: this.state.mean,
+            version: this.state.version,
             status: true
         };
 
@@ -103,7 +105,8 @@ class WordsPage extends Component {
         this.setState({
             operationalItem: {
                 keyword: this.state.keyword,
-                mean: this.state.mean
+                mean: this.state.mean,
+                version: this.state.version
             }
         });
     }
@@ -120,6 +123,7 @@ class WordsPage extends Component {
             [type]: true,
             keyword: item.keyword,
             mean: item.mean,
+            version: item.version,
             operationalItem: item
         });
     }
@@ -165,6 +169,15 @@ class WordsPage extends Component {
                                 placeholder='Mean'
                                 value={this.state.mean}
                                 onChange={e => this.setState({ mean: e.target.value })}
+                            />
+                        </FormGroup>
+                        <FormGroup>
+                            <Input
+                                type='text'
+                                className='form-control'
+                                placeholder='Version'
+                                value={this.state.version}
+                                onChange={e => this.setState({ version: e.target.value })}
                             />
                         </FormGroup>
                     </Form>
@@ -228,6 +241,15 @@ class WordsPage extends Component {
                                 onChange={e => this.setState({ mean: e.target.value })}
                             />
                         </FormGroup>
+                        <FormGroup>
+                            <Input
+                                type='text'
+                                className='form-control'
+                                placeholder='Version'
+                                value={this.state.version}
+                                onChange={e => this.setState({ version: e.target.value })}
+                            />
+                        </FormGroup>
                     </Form>
                 </ModalBody>
                 <ModalFooter>
@@ -288,6 +310,7 @@ class WordsPage extends Component {
                         <td>{item.keyword}</td>
                         <td>{item.mean}</td>
                         <td>{item.status}</td>
+                        <td>{item.version}</td>
                         <td>
                             <ButtonGroup>
                                 <Button
@@ -340,6 +363,7 @@ class WordsPage extends Component {
                                     <th>Keyword</th>
                                     <th>Mean</th>
                                     <th>Status</th>
+                                    <th>Version</th>
                                     <th>Operations</th>
                                 </tr>
                             </thead>
