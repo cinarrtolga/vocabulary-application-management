@@ -43,9 +43,14 @@ export const wordActions = {
     },
     updateWord: (data) => (dispatch) => {
         const xhr = new XMLHttpRequest();
-        xhr.open('post', 'api/word/updateWord', false);
+        xhr.open('post', 'api/word/updateWord', true);
         xhr.onload = () => {
-            console.log(xhr.responseText);
+            const result = JSON.parse(xhr.responseText);
+            if(result){
+                dispatch({ type: operation_success });
+            }else {
+                dispatch({ type: operation_false });
+            }
         };
         xhr.send(data);
 
@@ -53,9 +58,14 @@ export const wordActions = {
     },
     deleteWord: (data) => (dispatch) => {
         const xhr = new XMLHttpRequest();
-        xhr.open('post', 'api/word/deleteword', false);
+        xhr.open('post', 'api/word/deleteword', true);
         xhr.onload = () => {
-            console.log(xhr.responseText);
+            const result = JSON.parse(xhr.responseText);
+            if(result){
+                dispatch({ type: operation_success });
+            }else {
+                dispatch({ type: operation_false });
+            }
         };
         xhr.send(data);
 
