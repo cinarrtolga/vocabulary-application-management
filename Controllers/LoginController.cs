@@ -62,11 +62,12 @@ namespace vocabularyManagementTool.Controllers
         [HttpPost("[Action]")]
         public ActionResult LoginCheck()
         {
-            if (_tokenhelper.CheckToken())
+            var httpContext = _accessor.HttpContext;
+            _token = httpContext.Session.GetString("_member");
+            httpContext = null;
+
+            if (!string.IsNullOrEmpty(_token))
             {
-                var httpContext = _accessor.HttpContext;
-                _token = httpContext.Session.GetString("_token");
-                httpContext = null;
                 return Json(new { success = true });
             }
             else
