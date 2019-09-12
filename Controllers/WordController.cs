@@ -5,11 +5,12 @@ using Microsoft.AspNetCore.Mvc;
 using vocabularyManagementTool.Model;
 using vocabularyManagementTool.Helper.Dependencies;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Authorization;
 
 namespace vocabularyManagementTool.Controllers
 {
     [Route("api/[controller]")]
-    public class WordController : Controller 
+    public class WordController : Controller
     {
         private readonly ITokenHelper _tokenhelper;
         private readonly IWordOperationHelper _webApiHelper;
@@ -32,10 +33,13 @@ namespace vocabularyManagementTool.Controllers
         public ActionResult GetAllWords()
         {
             //Checking token for request
-            if(_tokenhelper.CheckToken()){
+            if (_tokenhelper.CheckToken())
+            {
                 var httpContext = _accessor.HttpContext;
                 _token = httpContext.Session.GetString("_token");
-            }else{
+            }
+            else
+            {
                 Task<string> result = _tokenhelper.CreateToken();
                 result.Wait();
                 _token = result.Result;
@@ -55,10 +59,13 @@ namespace vocabularyManagementTool.Controllers
         public ActionResult NewWord(WordsViewModel data)
         {
             //Checking token for request
-            if(_tokenhelper.CheckToken()){
+            if (_tokenhelper.CheckToken())
+            {
                 var httpContent = _accessor.HttpContext;
                 _token = httpContent.Session.GetString("_token");
-            }else{
+            }
+            else
+            {
                 Task<string> result = _tokenhelper.CreateToken();
                 result.Wait();
                 _token = result.Result;
@@ -77,11 +84,14 @@ namespace vocabularyManagementTool.Controllers
         [HttpPost("[Action]")]
         public ActionResult UpdateWord(WordsViewModel data)
         {
-            if(_tokenhelper.CheckToken()){
+            if (_tokenhelper.CheckToken())
+            {
                 var httpContent = _accessor.HttpContext;
                 _token = httpContent.Session.GetString("_token");
-            }else {
-               Task<string> result = _tokenhelper.CreateToken();
+            }
+            else
+            {
+                Task<string> result = _tokenhelper.CreateToken();
                 result.Wait();
                 _token = result.Result;
             }
@@ -99,16 +109,19 @@ namespace vocabularyManagementTool.Controllers
         [HttpPost("[Action]")]
         public ActionResult DeleteWord(WordsViewModel data)
         {
-            if(_tokenhelper.CheckToken()){
+            if (_tokenhelper.CheckToken())
+            {
                 var httpContent = _accessor.HttpContext;
                 _token = httpContent.Session.GetString("_token");
-            }else {
+            }
+            else
+            {
                 Task<string> result = _tokenhelper.CreateToken();
                 result.Wait();
                 _token = result.Result;
             }
 
-            Task<bool> operationResult= _webApiHelper.DeleteWordByWebApi(data, _token);
+            Task<bool> operationResult = _webApiHelper.DeleteWordByWebApi(data, _token);
 
             return Json(new { success = operationResult.Result });
         }

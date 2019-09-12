@@ -399,7 +399,7 @@ class WordsPage extends Component {
 /////////
 //#region
 const mapStateToProps = state => {
-    const { loading, wordsList, operationSuccess, operationFail } = state.wordActions
+    const { loading, wordsList, operationSuccess, operationFail } = state.wordActions;
 
     return { loading, wordsList, operationSuccess, operationFail };
 };

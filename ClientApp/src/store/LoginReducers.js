@@ -1,6 +1,6 @@
 const loginSuccess = 'LOGIN_SUCCESS';
 const loginFail = 'LOGIN_FAIL';
-const initialState = { returnState: false };
+const initialState = { returnState: false, loginControl: false };
 
 export const loginActions = {
     getUserDetail: (username, password) => async (dispatch, getState) => {
@@ -38,14 +38,16 @@ export const reducer = (state, action) => {
     if (action.type === loginSuccess) {
         return {
             ...state,
-            returnState: true
+            returnState: true,
+            loginControl: true
         };
     }
 
     if (action.type === loginFail) {
         return {
             ...state,
-            returnState: false
+            returnState: false,
+            loginControl: false
         };
     }
 
