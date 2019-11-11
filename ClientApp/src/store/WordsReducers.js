@@ -7,13 +7,16 @@ const word_delete = 'WORD_DELETE';
 const operation_success = 'OPERATION_SUCCESS';
 const operation_false = 'OPERATION_FALSE';
 const operation_reset = 'OPERATION_RESET';
+const login_success = 'LOGIN_SUCCESS';
+const login_fail = 'LOGIN_FAIL';
 const initialState = {
     loading: true,
     wordsList: [],
     showInsertModal: false,
     operationResult: false,
     operationSuccess: false,
-    operationFail: false
+    operationFail: false,
+    loginCheckStatus: false
 };
 
 export const wordActions = {
@@ -31,9 +34,9 @@ export const wordActions = {
         xhr.open('post', 'api/word/newword', true);
         xhr.onload = () => {
             const result = JSON.parse(xhr.responseText);
-            if(result){
+            if (result) {
                 dispatch({ type: operation_success });
-            }else {
+            } else {
                 dispatch({ type: operation_false });
             }
         };
@@ -46,9 +49,9 @@ export const wordActions = {
         xhr.open('post', 'api/word/updateWord', true);
         xhr.onload = () => {
             const result = JSON.parse(xhr.responseText);
-            if(result){
+            if (result) {
                 dispatch({ type: operation_success });
-            }else {
+            } else {
                 dispatch({ type: operation_false });
             }
         };
@@ -61,15 +64,25 @@ export const wordActions = {
         xhr.open('post', 'api/word/deleteword', true);
         xhr.onload = () => {
             const result = JSON.parse(xhr.responseText);
-            if(result){
-                dispatch({ type: operation_success });
-            }else {
-                dispatch({ type: operation_false });
-            }
         };
         xhr.send(data);
 
         dispatch({ type: word_delete });
+    },
+    checkLogin: () => (dispatch) => {
+        const xhr = new XMLHttpRequest();
+        xhr.open('post', 'api/login/LoginCheck', true);
+        xhr.onload = () => {
+            const result = JSON.parse(xhr.responseText);
+            if (result.success) {
+                dispatch({ type: login_success });
+            } else {
+                dispatch({ type: login_fail });
+            }
+        };
+        xhr.send(null);
+
+        dispatch({ type: login_fail });
     },
     resetOperations: () => (dispatch) => {
         dispatch({ type: operation_reset });
@@ -136,11 +149,25 @@ export const reducer = (state, action) => {
         }
     }
 
-    if(action.type === operation_reset){
+    if (action.type === operation_reset) {
         return {
             ...state,
             operationSuccess: false,
             operationFail: false
+        }
+    }
+
+    if (action.type = login_success) {
+        return {
+            ...state,
+            loginCheckStatus: true
+        }
+    }
+
+    if (action.type = login_fail) {
+        return {
+            ...state,
+            loginCheckStatus: false
         }
     }
 

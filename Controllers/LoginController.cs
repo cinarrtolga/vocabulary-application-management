@@ -72,7 +72,7 @@ namespace vocabularyManagementTool.Controllers
             }
             else
             {
-                return Json(new { success = true });
+                return Json(new { success = false });
             }
         }
     }

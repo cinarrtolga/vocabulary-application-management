@@ -36,7 +36,16 @@ class WordsPage extends Component {
     }
 
     componentWillMount() {
-        this.props.getAllWords();
+        this.props.checkLogin();
+
+        console.log(this.props.loginCheckStatus);
+
+        if (!this.props.loginCheckStatus) {
+            console.log("1");
+        } else {
+            this.props.getAllWords();
+            console.log("2");
+        }
     }
 
     //////////
@@ -399,9 +408,11 @@ class WordsPage extends Component {
 /////////
 //#region
 const mapStateToProps = state => {
-    const { loading, wordsList, operationSuccess, operationFail } = state.wordActions;
+    const { loading, wordsList, operationSuccess, operationFail, loginCheckStatus } = state.wordActions;
 
-    return { loading, wordsList, operationSuccess, operationFail };
+    console.log(loginCheckStatus);
+
+    return { loading, wordsList, operationSuccess, operationFail, loginCheckStatus };
 };
 //#endregion
 

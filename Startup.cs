@@ -9,6 +9,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using vocabularyManagementTool.Helper;
 using vocabularyManagementTool.Helper.Dependencies;
+using System.IO;
 
 namespace vocabularyManagementTool
 {
@@ -35,7 +36,8 @@ namespace vocabularyManagementTool
 
             //To do for Session
             //Default time 20 mins
-            services.AddSession(options => {
+            services.AddSession(options =>
+            {
                 options.Cookie.HttpOnly = true;
                 options.Cookie.IsEssential = true;
             });
@@ -62,7 +64,7 @@ namespace vocabularyManagementTool
                 app.UseHsts();
             }
 
-            app.UseHttpsRedirection();
+            //app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseSpaStaticFiles();
             app.UseSession();
@@ -76,7 +78,8 @@ namespace vocabularyManagementTool
 
             app.UseSpa(spa =>
             {
-                spa.Options.SourcePath = "ClientApp";
+                //spa.Options.SourcePath = "ClientApp";
+                spa.Options.SourcePath = Path.Join(env.ContentRootPath, "ClientApp");
 
                 if (env.IsDevelopment())
                 {
