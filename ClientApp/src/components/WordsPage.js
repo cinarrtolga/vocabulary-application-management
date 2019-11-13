@@ -40,7 +40,7 @@ class WordsPage extends Component {
 
         console.log(this.props.loginCheckStatus);
 
-        if (this.props.loginCheckStatus) {
+        if (!this.props.loginCheckStatus) {
             this.props.getAllWords();
         }
     }
@@ -389,7 +389,7 @@ class WordsPage extends Component {
             return (
                 <Container>
                     <Row>
-                        <Alert color="primary">
+                        <Alert color="primary" className="full-page-content">
                             You should logged in...
                         </Alert>
                     </Row>
@@ -399,7 +399,7 @@ class WordsPage extends Component {
             return (
                 <Container>
                     <Row>
-                        <Alert color="primary">
+                        <Alert color="primary" className="full-page-content">
                             Your components loading...
                         </Alert>
                     </Row>

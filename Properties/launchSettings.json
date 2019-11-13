@@ -3,7 +3,7 @@
     "windowsAuthentication": false,
     "anonymousAuthentication": true,
     "iis": {
-      "applicationUrl": "http://localhost/vocabularyManagementTool",
+      "applicationUrl": "http://localhost:5000",
       "sslPort": 0
     },
     "iisExpress": {
@@ -16,7 +16,7 @@
       "commandName": "IISExpress",
       "launchBrowser": true,
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Production"
+        "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },
     "vocabularyManagementToolProduction": {
@@ -31,9 +31,9 @@
       "commandName": "Project",
       "launchBrowser": true,
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Production"
+        "ASPNETCORE_ENVIRONMENT": "Development"
       },
-      "applicationUrl": "https://localhost:5001;http://localhost:5000,http://vocabularymanagementpanel"
+      "applicationUrl": "https://localhost:5001;http://localhost:5000"
     }
   }
 }
