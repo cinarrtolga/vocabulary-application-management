@@ -40,11 +40,8 @@ class WordsPage extends Component {
 
         console.log(this.props.loginCheckStatus);
 
-        if (!this.props.loginCheckStatus) {
-            console.log("1");
-        } else {
+        if (this.props.loginCheckStatus) {
             this.props.getAllWords();
-            console.log("2");
         }
     }
 
@@ -388,6 +385,16 @@ class WordsPage extends Component {
                     {this.OperationFailModal()}
                 </Container>
             );
+        } else if (this.props.loginCheckStatus) {
+            return (
+                <Container>
+                    <Row>
+                        <Alert color="primary">
+                            You should logged in...
+                        </Alert>
+                    </Row>
+                </Container>
+            );
         } else {
             return (
                 <Container>
@@ -409,8 +416,6 @@ class WordsPage extends Component {
 //#region
 const mapStateToProps = state => {
     const { loading, wordsList, operationSuccess, operationFail, loginCheckStatus } = state.wordActions;
-
-    console.log(loginCheckStatus);
 
     return { loading, wordsList, operationSuccess, operationFail, loginCheckStatus };
 };
