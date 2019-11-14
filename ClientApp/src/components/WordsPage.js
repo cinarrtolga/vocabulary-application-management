@@ -42,6 +42,7 @@ class WordsPage extends Component {
 
         if (!this.props.loginCheckStatus) {
             this.props.getAllWords();
+            this.forceUpdate();
         }
     }
 

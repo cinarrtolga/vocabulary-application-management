@@ -75,7 +75,7 @@ export const wordActions = {
         xhr.onload = () => {
             const result = JSON.parse(xhr.responseText);
             if (result.success) {
-                //dispatch({ type: login_success });
+                dispatch({ type: login_success });
             } else {
                 dispatch({ type: login_fail });
             }
@@ -154,14 +154,14 @@ export const reducer = (state, action) => {
             ...state,
             operationSuccess: false,
             operationFail: false,
-            loginCheckStatus: false
+            loginCheckStatus: true
         }
     }
 
-    if (action.type = login_fail) {
+    if (action.type = login_success) {
         return {
             ...state,
-            loginCheckStatus: true
+            loginCheckStatus: false
         }
     }
 
