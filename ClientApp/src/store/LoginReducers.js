@@ -16,7 +16,7 @@ export const loginActions = {
                 if (xhr.status === 200) {
                     var result = JSON.parse(xhr.response)
                     if (result.success) {
-                        console.log("Başarılı!");
+                        window.location.href = "/words";
                     }
                 } else {
                     console.error(xhr.statusText)
