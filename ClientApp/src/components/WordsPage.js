@@ -74,13 +74,13 @@ class WordsPage extends Component {
     //////////
     //#region
     btnWordInsert = () => {
-        var data = {
-            Id: null,
-            keyword: this.state.keyword,
-            mean: this.state.mean,
-            version: this.state.version,
-            status: true
-        };
+        const data = new FormData();
+        data.append("Keyword", this.state.keyword);
+        data.append("Mean", this.state.mean);
+        data.append("Version", this.state.version);
+        data.append("Status", true);
+
+        console.log(data);
 
         this.props.insertNewWord(data);
 
@@ -316,9 +316,8 @@ class WordsPage extends Component {
                         <td>{item.id}</td>
                         <td>{item.keyword}</td>
                         <td>{item.mean}</td>
-                        <td>{item.status}</td>
                         <td>{item.version}</td>
-                        <td>
+                        <td className="operation-column">
                             <ButtonGroup>
                                 <Button
                                     onClick={this.getModalPopUp.bind(this, item, 'updateModal')}
@@ -369,7 +368,6 @@ class WordsPage extends Component {
                                     <th>Id</th>
                                     <th>Keyword</th>
                                     <th>Mean</th>
-                                    <th>Status</th>
                                     <th>Version</th>
                                     <th>Operations</th>
                                 </tr>

@@ -32,15 +32,22 @@ export const wordActions = {
     insertNewWord: (data) => (dispatch) => {
         const xhr = new XMLHttpRequest();
         xhr.open('post', 'api/word/newword', true);
-        xhr.onload = () => {
-            const result = JSON.parse(xhr.responseText);
-            if (result) {
-                dispatch({ type: operation_success });
-            } else {
-                dispatch({ type: operation_false });
+        xhr.onload = function (e) {
+            if (xhr.readyState === 4) {
+                if (xhr.status === 200) {
+                    var result = JSON.parse(xhr.responseText)
+                    if (result) {
+                        dispatch({ type: operation_success });
+                    } else {
+                        dispatch({ type: operation_false });
+                    }
+                } else {
+                    console.error(xhr.statusText)
+                }
             }
-        };
-        xhr.send(data)
+        }.bind(this)
+
+        xhr.send(data);
 
         dispatch({ type: new_word_insert });
     },
