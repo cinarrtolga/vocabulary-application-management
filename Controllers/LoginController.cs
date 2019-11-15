@@ -74,5 +74,17 @@ namespace vocabularyManagementTool.Controllers
                 return Json(new { success = false });
             }
         }
+
+        //////
+        //This method for logout. This method clean all sessions.
+        //////
+        [HttpPost("[Action]")]
+        public ActionResult Logout()
+        {
+            var httpContext = _accessor.HttpContext;
+            HttpContext.Session.Clear();
+
+            return Json(new { success = true });
+        }
     }
 }

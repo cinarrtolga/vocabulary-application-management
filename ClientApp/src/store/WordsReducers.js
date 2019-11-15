@@ -111,6 +111,19 @@ export const wordActions = {
 
         dispatch({ type: login_fail });
     },
+    logout: () => (dispatch) => {
+        const xhr = new XMLHttpRequest();
+        xhr.open('post', 'api/login/Logout', true);
+        xhr.onload = () => {
+            const result = JSON.parse(xhr.responseText);
+            if (result.success) {
+                document.location.href = "/login";
+            }
+        };
+        xhr.send(null);
+
+        dispatch({ type: login_fail });
+    },
     resetOperations: () => (dispatch) => {
         dispatch({ type: operation_reset });
     }

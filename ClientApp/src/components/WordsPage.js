@@ -161,6 +161,10 @@ class WordsPage extends Component {
     }
     //#endregion
 
+    memberLogout = () => {
+        this.props.logout();
+    }
+
     //////////
     //Word update pop-up.
     //Working with state.
@@ -365,15 +369,19 @@ class WordsPage extends Component {
                         <div className='table-page-subDescription'>
                             <p>Vocabulary list as follows. You can create/update or remove any word in this page.</p>
                         </div>
-                        <Container>
-                            <div className='insert-buton-area'>
-                                <Button
-                                    onClick={this.getModalPopUp.bind(this, "", 'insertModal')}
-                                >
-                                    Insert New
+                        <div className='insert-buton-area'>
+                            <Button
+                                onClick={this.getModalPopUp.bind(this, "", 'insertModal')}
+                            >
+                                Insert New
                                 </Button>
-                            </div>
-                        </Container>
+                            <Button
+                                onClick={this.memberLogout.bind(this)}
+                                className="logout-button"
+                            >
+                                Logout
+                                </Button>
+                        </div>
                         <Table className='table table-bordered'>
                             <thead>
                                 <tr>
