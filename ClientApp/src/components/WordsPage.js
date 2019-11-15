@@ -53,7 +53,14 @@ class WordsPage extends Component {
     /////////
     //#region
     btnWordUpdate = (item) => {
-        this.props.updateWord(item);
+        const data = new FormData();
+        data.append("Id", item.id);
+        data.append("Keyword", this.state.keyword);
+        data.append("Mean", this.state.mean);
+        data.append("Version", this.state.version);
+        data.append("Status", item.status);
+
+        this.props.updateWord(data);
     }
     //#endregion
 
@@ -64,7 +71,14 @@ class WordsPage extends Component {
     /////////
     //#region
     btnWordDelete = (item) => {
-        this.props.deleteWord(item);
+        const data = new FormData();
+        data.append("Id", item.id);
+        data.append("Keyword", item.keyword);
+        data.append("Mean", item.mean);
+        data.append("Version", item.version);
+        data.append("Status", item.status);
+
+        this.props.deleteWord(data);
     }
     //#endregion
 
@@ -79,8 +93,6 @@ class WordsPage extends Component {
         data.append("Mean", this.state.mean);
         data.append("Version", this.state.version);
         data.append("Status", true);
-
-        console.log(data);
 
         this.props.insertNewWord(data);
 
@@ -190,7 +202,7 @@ class WordsPage extends Component {
                     </Form>
                 </ModalBody>
                 <ModalFooter>
-                    <Button color="primary" onClick={this.btnWordUpdate.bind(this, this.state.operationalItem)}>Insert</Button>
+                    <Button color="primary" onClick={this.btnWordUpdate.bind(this, this.state.operationalItem)}>Update</Button>
                     <Button color="secondary" onClick={this.closeModalPopUp.bind(this, 'insertModal')}>Cancel</Button>
                 </ModalFooter>
             </Modal>

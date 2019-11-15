@@ -1,11 +1,8 @@
-using System.Collections.Concurrent;
 using System.Threading.Tasks;
-using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 using vocabularyManagementTool.Model;
 using vocabularyManagementTool.Helper.Dependencies;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Authorization;
 
 namespace vocabularyManagementTool.Controllers
 {
@@ -16,8 +13,12 @@ namespace vocabularyManagementTool.Controllers
         private readonly IWordOperationHelper _webApiHelper;
         IHttpContextAccessor _accessor;
         private string _token;
+        private string _member;
 
-        public WordController(ITokenHelper tokenhelper, IHttpContextAccessor accessor, IWordOperationHelper webApiHelper)
+        public WordController(
+            ITokenHelper tokenhelper,
+            IHttpContextAccessor accessor,
+            IWordOperationHelper webApiHelper)
         {
             _tokenhelper = tokenhelper;
             _accessor = accessor;
@@ -32,23 +33,32 @@ namespace vocabularyManagementTool.Controllers
         [HttpPost("[action]")]
         public ActionResult GetAllWords()
         {
-            //Checking token for request
-            if (_tokenhelper.CheckToken())
+            var httpContext = _accessor.HttpContext;
+            _member = httpContext.Session.GetString("_member");
+
+            if (!string.IsNullOrEmpty(_member))
             {
-                var httpContext = _accessor.HttpContext;
-                _token = httpContext.Session.GetString("_token");
+                //Checking token for request
+                if (_tokenhelper.CheckToken())
+                {
+                    _token = httpContext.Session.GetString("_token");
+                }
+                else
+                {
+                    Task<string> result = _tokenhelper.CreateToken();
+                    result.Wait();
+                    _token = result.Result;
+                }
+
+                Task<WordsViewModelByWebApi> vocabularyList = _webApiHelper.GetWordsByWebApi(_token);
+                vocabularyList.Wait();
+
+                return Json(new { success = true, data = vocabularyList.Result });
             }
             else
             {
-                Task<string> result = _tokenhelper.CreateToken();
-                result.Wait();
-                _token = result.Result;
+                return Json(new { success = false });
             }
-
-            Task<WordsViewModelByWebApi> vocabularyList = _webApiHelper.GetWordsByWebApi(_token);
-            vocabularyList.Wait();
-
-            return Json(new { success = true, data = vocabularyList.Result });
         }
 
         //////
@@ -58,23 +68,32 @@ namespace vocabularyManagementTool.Controllers
         [HttpPost("[Action]")]
         public ActionResult NewWord(WordsViewModel data)
         {
-            //Checking token for request
-            if (_tokenhelper.CheckToken())
+            var httpContext = _accessor.HttpContext;
+            _member = httpContext.Session.GetString("_member");
+
+            if (!string.IsNullOrEmpty(_member))
             {
-                var httpContent = _accessor.HttpContext;
-                _token = httpContent.Session.GetString("_token");
+                //Checking token for request
+                if (_tokenhelper.CheckToken())
+                {
+                    _token = httpContext.Session.GetString("_token");
+                }
+                else
+                {
+                    Task<string> result = _tokenhelper.CreateToken();
+                    result.Wait();
+                    _token = result.Result;
+                }
+
+                Task<bool> operationResult = _webApiHelper.InsertNewWordByWebApi(data, _token);
+                operationResult.Wait();
+
+                return Json(new { success = operationResult.Result });
             }
             else
             {
-                Task<string> result = _tokenhelper.CreateToken();
-                result.Wait();
-                _token = result.Result;
+                return Json(new { success = false });
             }
-
-            Task<bool> operationResult = _webApiHelper.InsertNewWordByWebApi(data, _token);
-            operationResult.Wait();
-
-            return Json(new { success = operationResult.Result });
         }
 
         //////
@@ -84,22 +103,31 @@ namespace vocabularyManagementTool.Controllers
         [HttpPost("[Action]")]
         public ActionResult UpdateWord(WordsViewModel data)
         {
-            if (_tokenhelper.CheckToken())
+            var httpContext = _accessor.HttpContext;
+            _member = httpContext.Session.GetString("_member");
+
+            if (!string.IsNullOrEmpty(_member))
             {
-                var httpContent = _accessor.HttpContext;
-                _token = httpContent.Session.GetString("_token");
+                if (_tokenhelper.CheckToken())
+                {
+                    _token = httpContext.Session.GetString("_token");
+                }
+                else
+                {
+                    Task<string> result = _tokenhelper.CreateToken();
+                    result.Wait();
+                    _token = result.Result;
+                }
+
+                Task<bool> operationResult = _webApiHelper.UpdateWordByWebApi(data, _token);
+                operationResult.Wait();
+
+                return Json(new { success = operationResult.Result });
             }
             else
             {
-                Task<string> result = _tokenhelper.CreateToken();
-                result.Wait();
-                _token = result.Result;
+                return Json(new { success = false });
             }
-
-            Task<bool> operationResult = _webApiHelper.UpdateWordByWebApi(data, _token);
-            operationResult.Wait();
-
-            return Json(new { success = operationResult.Result });
         }
 
         //////
@@ -109,21 +137,30 @@ namespace vocabularyManagementTool.Controllers
         [HttpPost("[Action]")]
         public ActionResult DeleteWord(WordsViewModel data)
         {
-            if (_tokenhelper.CheckToken())
+            var httpContext = _accessor.HttpContext;
+            _member = httpContext.Session.GetString("_member");
+
+            if (!string.IsNullOrEmpty(_member))
             {
-                var httpContent = _accessor.HttpContext;
-                _token = httpContent.Session.GetString("_token");
+                if (_tokenhelper.CheckToken())
+                {
+                    _token = httpContext.Session.GetString("_token");
+                }
+                else
+                {
+                    Task<string> result = _tokenhelper.CreateToken();
+                    result.Wait();
+                    _token = result.Result;
+                }
+
+                Task<bool> operationResult = _webApiHelper.DeleteWordByWebApi(data, _token);
+
+                return Json(new { success = operationResult.Result });
             }
             else
             {
-                Task<string> result = _tokenhelper.CreateToken();
-                result.Wait();
-                _token = result.Result;
+                return Json(new { success = false });
             }
-
-            Task<bool> operationResult = _webApiHelper.DeleteWordByWebApi(data, _token);
-
-            return Json(new { success = operationResult.Result });
         }
     }
 }

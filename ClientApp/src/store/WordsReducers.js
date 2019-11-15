@@ -45,7 +45,7 @@ export const wordActions = {
                     console.error(xhr.statusText)
                 }
             }
-        }.bind(this)
+        }.bind(this);
 
         xhr.send(data);
 
@@ -54,24 +54,44 @@ export const wordActions = {
     updateWord: (data) => (dispatch) => {
         const xhr = new XMLHttpRequest();
         xhr.open('post', 'api/word/updateWord', true);
-        xhr.onload = () => {
-            const result = JSON.parse(xhr.responseText);
-            if (result) {
-                dispatch({ type: operation_success });
-            } else {
-                dispatch({ type: operation_false });
+        xhr.onload = function (e) {
+            if (xhr.readyState === 4) {
+                if (xhr.status === 200) {
+                    var result = JSON.parse(xhr.responseText)
+                    if (result) {
+                        dispatch({ type: operation_success });
+                    } else {
+                        dispatch({ type: operation_false });
+                    }
+                } else {
+                    console.error(xhr.statusText)
+                }
             }
-        };
+        }.bind(this);
+
         xhr.send(data);
 
         dispatch({ type: word_update });
     },
     deleteWord: (data) => (dispatch) => {
+        console.log(data);
+
         const xhr = new XMLHttpRequest();
         xhr.open('post', 'api/word/deleteword', true);
-        xhr.onload = () => {
-            const result = JSON.parse(xhr.responseText);
-        };
+        xhr.onload = function (e) {
+            if (xhr.readyState === 4) {
+                if (xhr.status === 200) {
+                    var result = JSON.parse(xhr.responseText)
+                    if (result) {
+                        dispatch({ type: operation_success });
+                    } else {
+                        dispatch({ type: operation_false });
+                    }
+                } else {
+                    console.error(xhr.statusText)
+                }
+            }
+        }.bind(this);
         xhr.send(data);
 
         dispatch({ type: word_delete });
