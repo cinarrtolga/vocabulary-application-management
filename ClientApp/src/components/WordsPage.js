@@ -35,14 +35,16 @@ class WordsPage extends Component {
         };
     }
 
-    componentWillMount() {
+    componentDidMount() {
         this.props.checkLogin();
+    }
 
-        console.log(this.props.loginCheckStatus);
-
-        if (!this.props.loginCheckStatus) {
-            this.props.getAllWords();
-            this.forceUpdate();
+    componentWillReceiveProps(nextProps) {
+        if (nextProps.loginCheckStatus !== this.props.loginCheckStatus) {
+            if (nextProps.loginCheckStatus) {
+                this.props.getAllWords();
+                this.forceUpdate();
+            }
         }
     }
 
@@ -359,7 +361,27 @@ class WordsPage extends Component {
     //////////
     //#region
     render() {
-        if (!this.props.loading) {
+        if (!this.props.loginCheckStatus) {
+            return (
+                <Container>
+                    <Row>
+                        <Alert color="primary" className="full-page-content">
+                            You should logged in...
+                    </Alert>
+                    </Row>
+                </Container>
+            );
+        } else if (this.props.loading) {
+            return (
+                <Container>
+                    <Row>
+                        <Alert color="primary" className="full-page-content">
+                            Your components loading...
+                        </Alert>
+                    </Row>
+                </Container>
+            );
+        } else {
             return (
                 <Container>
                     <Row>
@@ -402,26 +424,6 @@ class WordsPage extends Component {
                     {this.InsertNewWordModal()}
                     {this.OperationSuccessModal()}
                     {this.OperationFailModal()}
-                </Container>
-            );
-        } else if (this.props.loginCheckStatus) {
-            return (
-                <Container>
-                    <Row>
-                        <Alert color="primary" className="full-page-content">
-                            You should logged in...
-                        </Alert>
-                    </Row>
-                </Container>
-            );
-        } else {
-            return (
-                <Container>
-                    <Row>
-                        <Alert color="primary" className="full-page-content">
-                            Your components loading...
-                        </Alert>
-                    </Row>
                 </Container>
             );
         }

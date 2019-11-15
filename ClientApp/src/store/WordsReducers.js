@@ -7,8 +7,9 @@ const word_delete = 'WORD_DELETE';
 const operation_success = 'OPERATION_SUCCESS';
 const operation_false = 'OPERATION_FALSE';
 const operation_reset = 'OPERATION_RESET';
-const login_success = 'LOGIN_SUCCESS';
+const login_control_success = 'LOGIN_CONTROL_SUCCESS';
 const login_fail = 'LOGIN_FAIL';
+const logout_success = 'LOGOUT_SUCCESS';
 const initialState = {
     loading: true,
     wordsList: [],
@@ -25,6 +26,7 @@ export const wordActions = {
         xhr.open('post', 'api/word/getallwords', true);
         xhr.onload = () => {
             const result = JSON.parse(xhr.responseText);
+            console.log(result);
             dispatch({ type: get_words_list, data: result.data.success });
         };
         xhr.send(null);
@@ -102,14 +104,12 @@ export const wordActions = {
         xhr.onload = () => {
             const result = JSON.parse(xhr.responseText);
             if (result.success) {
-                dispatch({ type: login_success });
+                dispatch({ type: login_control_success });
             } else {
                 dispatch({ type: login_fail });
             }
         };
         xhr.send(null);
-
-        dispatch({ type: login_fail });
     },
     logout: () => (dispatch) => {
         const xhr = new XMLHttpRequest();
@@ -117,6 +117,7 @@ export const wordActions = {
         xhr.onload = () => {
             const result = JSON.parse(xhr.responseText);
             if (result.success) {
+                dispatch({ type: logout_success });
                 document.location.href = "/login";
             }
         };
@@ -194,13 +195,26 @@ export const reducer = (state, action) => {
             ...state,
             operationSuccess: false,
             operationFail: false,
+            loginCheckStatus: false
+        }
+    }
+
+    if (action.type === login_control_success) {
+        return {
+            ...state,
             loginCheckStatus: true
         }
     }
 
-    if (action.type = login_success) {
+    if (action.type === logout_success) {
         return {
             ...state,
+            loading: true,
+            wordsList: [],
+            showInsertModal: false,
+            operationResult: false,
+            operationSuccess: false,
+            operationFail: false,
             loginCheckStatus: false
         }
     }
